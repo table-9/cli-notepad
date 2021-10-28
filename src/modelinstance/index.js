@@ -1,5 +1,5 @@
 "use strict";
-
+require("dotenv").config();
 const { Sequelize, DataTypes } = require("sequelize");
 const Collection = require("../models/data-collection.js");
 const userModel = require("../auth/models/users.js");
