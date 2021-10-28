@@ -3,7 +3,7 @@
 const notesModel = (sequelize, DataTypes) =>
   sequelize.define("Notes", {
     text: { type: DataTypes.STRING, required: true },
-    // date: { type: DataTypes.DATE, defaultValue: sequelize.NOW },
+    // course: { string: }
     creator: { type: DataTypes.STRING, required: true },
   });
 
