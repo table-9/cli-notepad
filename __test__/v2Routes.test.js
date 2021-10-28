@@ -25,53 +25,54 @@ describe("Testing authentication routes", () => {
     token = userObject.token;
 
     const response = await request
-      .post("/api/v2/food")
+      .post("/api/v2/notes")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        name: "tomato",
-        calories: 900,
-        type: "fruit",
+        text: "this is a notes line",
+        creator: "anthony",
       });
     expect(response.status).toEqual(201);
-    expect(response.body.name).toEqual("tomato");
+    expect(response.body.text).toEqual("this is a notes line");
+    expect(response.body.creator).toEqual("anthony");
   });
 
   it("Should be able to returns a list of :model items using GET /api/v2/:model", async () => {
     const response = await request
-      .get("/api/v2/food")
+      .get("/api/v2/notes")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
     expect(typeof response.body).toEqual("object");
   });
   it("Should be able to returns single item by ID using GET /api/v2/:model/ID", async () => {
     const response = await request
-      .get("/api/v2/food/1")
+      .get("/api/v2/notes/1")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
-    expect(response.body.name).toEqual("tomato");
+    expect(response.body.text).toEqual("this is a notes line");
+    expect(response.body.date).toEqual();
   });
 
   it("Should be able to update single item by ID using PUT /api/v2/:model/ID", async () => {
     const response = await request
-      .put("/api/v2/food/1")
+      .put("/api/v2/notes/1")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        name: "guava",
-        calories: 4002,
-        type: "vegetable",
+        text: "this is an updated line of notes",
+        creator: "dario",
       });
     expect(response.status).toEqual(200);
-    expect(response.body.name).toEqual("guava");
+    expect(response.body.text).toEqual("this is an updated line of notes");
+    expect(response.body.creator).toEqual("dario");
   });
 
   it("Should be able to delete single item by ID using DELETE /api/v2/:model/ID and test with GET to get null in response", async () => {
     const responseDel = await request
-      .delete("/api/v2/food/1")
+      .delete("/api/v2/notes/1")
       .set("Authorization", `Bearer ${token}`);
     expect(responseDel.body).toBe(1);
 
     const response = await request
-      .get("/api/v2/food/1")
+      .get("/api/v2/notes/1")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
     expect(response.body === null).toBe(true);
