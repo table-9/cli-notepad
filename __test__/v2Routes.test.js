@@ -15,64 +15,67 @@ afterAll(async () => {
 let token = null;
 
 describe("Testing authentication routes", () => {
-  it("Should be able to add an item to the DB and returns an object with the added item using POST /api/v2/:mode", async () => {
+  it("Should be able to add an item to the DB and returns an object with the added item using POST /api/:mode", async () => {
     const responseUser = await request.post("/signup").send({
       username: "user",
       password: "password",
-      role: "admin",
+      role: "teacher",
     });
     const userObject = responseUser.body.user;
     token = userObject.token;
 
     const response = await request
-      .post("/api/v2/notes")
+      .post("/api/bulletin")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        text: "this is a notes line",
-        creator: "anthony",
+        subject: "Lab 01",
+        body: "create a really cool lab",
+        dueDate: "10/1/20",
       });
     expect(response.status).toEqual(201);
-    expect(response.body.text).toEqual("this is a notes line");
-    expect(response.body.creator).toEqual("anthony");
+    expect(response.body.subject).toEqual("Lab 01");
+    expect(response.body.body).toEqual("create a really cool lab");
+    expect(response.body.dueDate).toEqual("10/1/20");
   });
 
-  it("Should be able to returns a list of :model items using GET /api/v2/:model", async () => {
+  it("Should be able to returns a list of :model items using GET /api/:model", async () => {
     const response = await request
-      .get("/api/v2/notes")
+      .get("/api/bulletin")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
     expect(typeof response.body).toEqual("object");
   });
-  it("Should be able to returns single item by ID using GET /api/v2/:model/ID", async () => {
+  it("Should be able to returns single item by ID using GET /api/:model/ID", async () => {
     const response = await request
-      .get("/api/v2/notes/1")
+      .get("/api/bulletin/1")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
-    expect(response.body.text).toEqual("this is a notes line");
-    // expect(response.body.date).toEqual();
+    expect(response.body.subject).toEqual("Lab 01");
   });
 
-  it("Should be able to update single item by ID using PUT /api/v2/:model/ID", async () => {
+  it("Should be able to update single item by ID using PUT /api/:model/ID", async () => {
     const response = await request
-      .put("/api/v2/notes/1")
+      .put("/api/bulletin/1")
       .set("Authorization", `Bearer ${token}`)
       .send({
-        text: "this is an updated line of notes",
-        creator: "dario",
+        subject: "Lab 02",
+        body: "different lab",
+        dueDate: "10/1/21",
       });
     expect(response.status).toEqual(200);
-    expect(response.body.text).toEqual("this is an updated line of notes");
-    expect(response.body.creator).toEqual("dario");
+    expect(response.body.subject).toEqual("Lab 02");
+    expect(response.body.body).toEqual("different lab");
+    expect(response.body.dueDate).toEqual("10/1/21");
   });
 
-  it("Should be able to delete single item by ID using DELETE /api/v2/:model/ID and test with GET to get null in response", async () => {
+  it("Should be able to delete single item by ID using DELETE /api/:model/ID and test with GET to get null in response", async () => {
     const responseDel = await request
-      .delete("/api/v2/notes/1")
+      .delete("/api/bulletin/1")
       .set("Authorization", `Bearer ${token}`);
     expect(responseDel.body).toBe(1);
 
     const response = await request
-      .get("/api/v2/notes/1")
+      .get("/api/bulletin/1")
       .set("Authorization", `Bearer ${token}`);
     expect(response.status).toEqual(200);
     expect(response.body === null).toBe(true);
