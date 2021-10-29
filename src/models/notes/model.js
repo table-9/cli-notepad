@@ -1,10 +1,10 @@
 "use strict";
 
-const notesModel = (sequelize, DataTypes) =>
-  sequelize.define("Notes", {
+const bulletinModel = (sequelize, DataTypes) =>
+  sequelize.define("bulletin", {
     text: { type: DataTypes.STRING, required: true },
-    // course: { string: }
+    course: { type: DataTypes.STRING, required: true },
     creator: { type: DataTypes.STRING, required: true },
   });
 
-module.exports = notesModel;
+module.exports = bulletinModel;
